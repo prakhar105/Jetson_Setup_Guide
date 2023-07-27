@@ -132,3 +132,56 @@ $ sudo pip3 install -U jetson-stats
 
 
 
+How to flash external drive SD card on AVerAI EN715-TX2-NX(TN111B) 
+Applies to: Jetson TX2 series EN715-TX2-NX(TN111B) with JetPack4.6 version. 
+A. Hardware setup - Prepare a Linux Host PC (Ubuntu 18.04 with x64 CPU)
+A-1. Connect the SD card to external device a host Linux PC via a card reader. 
+A-2. Create GPT and partiton using gdisk on the device: 
+$ sudo gdisk /dev/sdx 
+ "o" -> clear all current partition data 
+ "n" -> create new partition 
+ Partition number -> Press enter to use default 
+ First sectors -> Press enter using default 
+ Last sectors -> Press enter using default 
+ Hex code or GUID -> Press enter to use default type “8300: Linux filesystem” 
+ "c" -> partition's name "PARTLABEL" 
+ "w" -> write to disk and exit. 
+A-3. Get partition UUID and copy rootfs to the device: 
+ $ sudo mkfs.ext4 /dev/sdx1 
+ // get partition UUID 
+ $ sudo blkid /dev/ sdx1 
+ $ sudo mount /dev/sdx1 /mnt 
+ // Enter to BSP's rootfs directory 
+ $ cd <BSP_DIRECTORY_PATH>Linux_for_Tegra/rootfs/ 
+ // copy rootfs 
+ $ sudo tar -cpf - * | ( cd /mnt/ ; sudo tar -xpf - ) 
+ $ sudo umount /mnt 
+B. Prepare Host Linux PC(Ubuntu 18.04 with x64 CPU) --- Run through Ubuntu Setup 
+B-1. Insert the SD card to EN715-TX2-NX SD slot 
+ a). Enter L4T directory 
+ $ cd JetPack_4.6_Linux_JETSON_TX2_TARGETS/Linux_for_Tegra 
+ b). Select one profile for MIPI CSI camera --- (optional)
+ $ sudo ./setup.sh 
+ --------------------------------------------------------------------------------------------- 
+ Supported CSI camera profiles: 
+ 0) imx179 
+ 1) imx290 
+ 2) imx290isp 
+ 3) imx334 
+ 4) imx334+imx290isp 
+ 5) imx334thcv 
+ 6) no_csi_camera 
+ 7) raspberry_pi_v2 
+ --------------------------------------------------------------------------------------------- 
+ c). Insert micro USB to EN715-TX2-NX and connect to host linux PC(amd64) USB connector. 
+ d). Enter the recovery mode 
+ power off -> press recovery button -> power on -> wait 2 seconds -> release recovery button 
+ e). Start to flash BSP 
+ # Use default user account. ( username/password: nvidia ), do once every time when decompress BSP. 
+ $ sudo ./install.sh --no-flash 
+ # flash BSP 
+ $ sudo ./flash.sh jetson-tx2-nx-en715 mmcblk1p1 
+C. Wait for flash process success. After succeed, you can use command “df -h” to check filesystem on Jetson platform. 
+ * If it shows failure, please try again from step A-2, and make sure that in step A-3, “sudo umount /mnt” is executed correctly.
+
+
