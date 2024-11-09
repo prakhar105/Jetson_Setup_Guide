@@ -33,7 +33,7 @@ $ sudo echo "deb https://repo.download.nvidia.com/jetson/common r32.7 main" >> /
 $ sudo echo "deb https://repo.download.nvidia.com/jetson/t194 r32.7 main" >> /etc/apt/sources.list.d/nvidia-l4t-apt-source.list
 $ sudo apt update 
 $ sudo apt install nvidia-tensorrt
-
+export PYTHONPATH=/usr/lib/python3.10/dist-packages:$PYTHONPATH
 
 VPI installation
 https://repo.download.nvidia.com/jetson/common/pool/main/libn/libnvvpi1/libnvvpi1_1.1.12_arm64.deb
