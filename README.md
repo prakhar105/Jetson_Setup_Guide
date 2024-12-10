@@ -184,4 +184,6 @@ B-1. Insert the SD card to EN715-TX2-NX SD slot
 C. Wait for flash process success. After succeed, you can use command “df -h” to check filesystem on Jetson platform. 
  * If it shows failure, please try again from step A-2, and make sure that in step A-3, “sudo umount /mnt” is executed correctly.
 
+## ONNXruntime: https://elinux.org/Jetson_Zoo#ONNX_Runtime
+
 
